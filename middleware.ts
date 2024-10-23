@@ -1,26 +1,22 @@
+
 import { clerkMiddleware } from "@clerk/nextjs/server";
 
-const combinedMiddleware = clerkMiddleware({
-  publicRoutes: [
-    '/',
-    '/events/:id',
-    '/api/webhook/stripe',
-    '/api/uploadthing'
-  ],
-  ignoredRountes: [
-    '/',
-    '/events/:id',
-    '/api/webhook/stripe',
-    '/api/uploadthing'
-  ]
-});
+// Middleware without direct `publicRoutes` or `ignoredRoutes` options
+const combinedMiddleware = clerkMiddleware();
 
 export default combinedMiddleware;
 
 export const config = {
   matcher: [
-    // Skip Next.js internals and all static files, unless found in search params
+    // Public routes that do not require Clerk middleware
+    '/',
+    '/events/:id',
+    '/api/webhook/stripe',
+    '/api/uploadthing',
+
+    // Apply Clerk middleware for all other routes, except for static assets
     '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    
     // Always run for API routes
     '/(api|trpc)(.*)',
   ],
