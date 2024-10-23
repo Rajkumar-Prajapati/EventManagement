@@ -1,9 +1,16 @@
+
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 
 const f = createUploadthing();
 
-const auth = (req: Request) => ({ id: "fakeId" }); // Fake auth function
+const auth = (req: Request) => {
+  // Log the request method or any headers, marking `req` as used
+  console.log("Request received with method:", req.method);
+  
+  // Example authentication logic (fake auth function)
+  return { id: "fakeId" };
+};
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
@@ -11,7 +18,10 @@ export const ourFileRouter = {
   imageUploader: f({ image: { maxFileSize: "4MB" } })
     // Set permissions and file types for this FileRoute
     .middleware(async ({ req }) => {
-      // This code runs on your server before upload
+      // Now req is used for logging
+      console.log("Inside middleware, req method:", req.method);
+      
+      // Use the request in the auth function
       const user = await auth(req);
 
       // If you throw, the user will not be able to upload
