@@ -55,12 +55,13 @@ export async function POST(req: Request) {
   if (eventType === 'user.created') {
     const { id, email_addresses, image_url, first_name, last_name, username } = evt.data;
 
+    // Ensure that firstName and lastName are strings, or use an empty string if null
     const user = {
       clerkId: id,
       email: email_addresses[0].email_address,
       username: username!,
-      firstName: first_name,
-      lastName: last_name,
+      firstName: first_name || '',  // Default to empty string if null
+      lastName: last_name || '',    // Default to empty string if null
       photo: image_url,
     };
 
@@ -80,9 +81,10 @@ export async function POST(req: Request) {
   if (eventType === 'user.updated') {
     const { id, image_url, first_name, last_name, username } = evt.data;
 
+    // Ensure that firstName and lastName are strings, or use an empty string if null
     const user = {
-      firstName: first_name,
-      lastName: last_name,
+      firstName: first_name || '',  // Default to empty string if null
+      lastName: last_name || '',    // Default to empty string if null
       username: username!,
       photo: image_url,
     };
