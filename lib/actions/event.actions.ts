@@ -1,13 +1,12 @@
-
 'use server'
 
 import { revalidatePath } from 'next/cache'
-
 import { connectToDatabase } from '@/lib/database'
 import Event from '../database/models/event.models'
 import User from '../database/models/user.models'
 import Category from '@/lib/database/models/category.model'
 import { handleError } from '@/lib/utils'
+import { Document, Query } from 'mongoose' // Import necessary types
 
 import {
   CreateEventParams,
@@ -18,11 +17,13 @@ import {
   GetRelatedEventsByCategoryParams,
 } from '@/types'
 
+// Function to get a category by its name
 const getCategoryByName = async (name: string) => {
   return Category.findOne({ name: { $regex: name, $options: 'i' } })
 }
 
-const populateEvent = (query: any) => {
+// Function to populate event data
+const populateEvent = (query: Query<Document>) => { // Specify a more specific type here
   return query
     .populate({ path: 'organizer', model: User, select: '_id firstName lastName' })
     .populate({ path: 'category', model: Category, select: '_id name' })
