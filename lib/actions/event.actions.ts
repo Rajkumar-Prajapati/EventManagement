@@ -22,6 +22,7 @@ const getCategoryByName = async (name: string) => {
 }
 
 // Function to populate event data
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const populateEvent = (query: mongoose.Query<any, Document>) => {
   return query
     .populate({ path: 'organizer', model: User, select: '_id firstName lastName' })
