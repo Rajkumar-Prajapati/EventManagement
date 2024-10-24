@@ -6,8 +6,6 @@ import Event from '../database/models/event.models'
 import User from '../database/models/user.models'
 import Category from '@/lib/database/models/category.model'
 import { handleError } from '@/lib/utils'
-import { Document, Query } from 'mongoose' // Import necessary types
-
 import {
   CreateEventParams,
   UpdateEventParams,
@@ -16,6 +14,7 @@ import {
   GetEventsByUserParams,
   GetRelatedEventsByCategoryParams,
 } from '@/types'
+import mongoose, { Document } from 'mongoose'
 
 // Function to get a category by its name
 const getCategoryByName = async (name: string) => {
@@ -23,7 +22,7 @@ const getCategoryByName = async (name: string) => {
 }
 
 // Function to populate event data
-const populateEvent = (query: Query<Document>) => { // Specify a more specific type here
+const populateEvent = (query: mongoose.Query<any, Document>) => {
   return query
     .populate({ path: 'organizer', model: User, select: '_id firstName lastName' })
     .populate({ path: 'category', model: Category, select: '_id name' })
